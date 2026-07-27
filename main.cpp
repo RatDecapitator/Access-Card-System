@@ -2,56 +2,29 @@
 
 #include "employee.h"
 #include "accesscard.h"
-
+#include "accesscontrolsystem.h"
 
 int main()
 {
-    // Tworzymy pracownika
     Employee employee1(
         "E000001",
         "Oliwier",
         EmployeeStatus::Working
     );
 
-
-    // Tworzymy kartę przypisaną do pracownika
     AccessCard card1(
         "C000001",
         employee1.getId(),
         AccessCardStatus::Active
     );
 
+    AccessControlSystem system;
 
-    // Sprawdzamy dane pracownika
-    std::cout << "Employee ID: "
-              << employee1.getId()
-              << "\n";
+    system.addEmployee(employee1);
+    system.addCard(card1);
 
-    std::cout << "Employee name: "
-              << employee1.getName()
-              << "\n";
-
-
-    // Sprawdzamy dane karty
-    std::cout << "Card ID: "
-              << card1.getId()
-              << "\n";
-
-    std::cout << "Card owner ID: "
-              << card1.getOwnerId()
-              << "\n";
-
-
-    // Zmieniamy status karty
-    card1.setStatus(AccessCardStatus::Lost);
-
-
-    // Sprawdzamy czy zmiana działa
-    if(card1.getStatus() == AccessCardStatus::Lost)
-    {
-        std::cout << "Card status: Lost\n";
-    }
-
+    std::cout << "Employees: " << system.getEmployees().size() << "\n";
+    std::cout << "Cards: " << system.getCards().size() << "\n";
 
     return 0;
 }
