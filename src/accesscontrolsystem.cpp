@@ -105,4 +105,34 @@ bool AccessControlSystem::changeCardOwner(const std::string& cardId, const std::
     card->setOwnerId(newOwnerId);
 
     return true;
+    
 }
+
+bool AccessControlSystem::activateCard(const std::string& cardId)
+{
+    AccessCard* card = findCardById(cardId);
+
+    if(card == nullptr)
+    {
+        return false;
+    }
+
+    card->setStatus(AccessCardStatus::Active);
+
+    return true;
+}
+
+bool AccessControlSystem::deactivateCard(const std::string& cardId)
+{
+    AccessCard* card = findCardById(cardId);
+
+    if(card == nullptr)
+    {
+        return false;
+    }
+
+    card->setStatus(AccessCardStatus::Inactive);
+
+    return true;
+}
+

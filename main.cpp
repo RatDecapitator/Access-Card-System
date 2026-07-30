@@ -87,6 +87,28 @@ int main()
             << system.getCards()[0].getOwnerId()
             << "\n";    
 
+    bool activated = system.activateCard("C000001");
+
+    if(activated)
+    {
+        std::cout << "Card activated\n";
+    }
+    else
+    {
+        std::cout << "Activation failed\n";
+    }
+
+    bool deactivated = system.deactivateCard("C000001");
+
+    if(deactivated)
+    {
+        std::cout << "Card deactivated\n";
+    }
+    else
+    {
+        std::cout << "Deactivation failed\n";
+    }    
+        
     return 0;
 
 }

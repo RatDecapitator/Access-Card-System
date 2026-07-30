@@ -37,6 +37,8 @@ class AccessCard
 
         AccessCardStatus getStatus() const;
 
+        bool activateCard(const std::string& cardId);
+
 };
 
 

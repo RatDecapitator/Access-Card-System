@@ -34,5 +34,8 @@ class AccessControlSystem
 
         bool changeCardOwner(const std::string& cardId, const std::string& newOwnerId);
 
+        bool activateCard(const std::string& cardId);
+
+        bool deactivateCard(const std::string& cardId);
 
 };
