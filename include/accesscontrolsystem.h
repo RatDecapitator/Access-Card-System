@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <string>
+
 #include "employee.h"
 
 #include "accesscard.h"
@@ -23,6 +25,10 @@ class AccessControlSystem
         const std::vector<Employee>& getEmployees() const;
 
         const std::vector<AccessCard>& getCards() const;
+
+        Employee* findEmployeeById(const std::string& id);
+
+        AccessCard* findCardById(const std::string& id);
 
 
 
