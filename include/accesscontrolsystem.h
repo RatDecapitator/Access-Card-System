@@ -30,7 +30,9 @@ class AccessControlSystem
 
         AccessCard* findCardById(const std::string& id);
 
+        bool canAccess(const std::string& cardId);
 
+        bool changeCardOwner(const std::string& cardId, const std::string& newOwnerId);
 
 
 };

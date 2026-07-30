@@ -70,5 +70,23 @@ int main()
         std::cout << "Card not found\n";
     }    
 
+    std::cout << system.canAccess("C000001") << "\n";
+
+    bool changed = system.changeCardOwner("C000001", "E000002");
+
+    if(changed)
+    {
+        std::cout << "Owner changed\n";
+    }
+    else
+    {
+        std::cout << "Owner change failed\n";
+    }
+
+    std::cout << "New owner: "
+            << system.getCards()[0].getOwnerId()
+            << "\n";    
+
     return 0;
+
 }
