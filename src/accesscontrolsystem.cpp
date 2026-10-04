@@ -1,9 +1,18 @@
 #include "accesscontrolsystem.h"
 
 
-void AccessControlSystem::addEmployee(const Employee& employee)
+bool AccessControlSystem::addEmployee(const Employee& employee)
 {
-    employees.push_back(employee);
+    if (findEmployeeById(employee.getId()) == nullptr)
+    {
+        employees.push_back(employee);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
 }
 
 

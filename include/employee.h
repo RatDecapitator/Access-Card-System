@@ -2,14 +2,7 @@
 
 #include <string>
 
-enum class EmployeeStatus
-{
-    Working,
-    OnVacation,
-    Suspended,
-    Fired,
-    SickLeave,
-};
+#include "status.h"
 
 class Employee
 

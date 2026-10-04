@@ -2,21 +2,21 @@
 
 #include <string>
 
-enum class AccessCardStatus
-{
-    Active,
-    Inactive,
-    Lost,
-    Broken
-};
+#include "status.h"
+
+#include <vector>
+
+#include "cardhistory.h"
 
 class AccessCard
 {
     private:
 
+        std::vector<CardHistory> history;
         std::string cardId;
         AccessCardStatus status;
         std::string ownerId;
+
 
 
     public:
@@ -37,7 +37,9 @@ class AccessCard
 
         AccessCardStatus getStatus() const;
 
-        bool activateCard(const std::string& cardId);
+        void addHistory(AccessCardStatus newStatus);
+
+        const std::vector<CardHistory>& getHistory() const;
 
 };
 

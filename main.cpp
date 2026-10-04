@@ -24,6 +24,7 @@ int main()
         employee1.getId(),
         AccessCardStatus::Active
     );
+    
 
 
     AccessControlSystem system;
@@ -108,6 +109,18 @@ int main()
     {
         std::cout << "Deactivation failed\n";
     }    
+
+
+    for (const CardHistory& history : card1.getHistory())
+    {
+        if (history.newStatus == AccessCardStatus::Active)
+        {
+            std::cout << "Active\n";
+        }
+        else{
+            std::cout << "Inactive\n";
+        }
+    }
         
     return 0;
 

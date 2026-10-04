@@ -26,7 +26,19 @@ const std::string& AccessCard::getOwnerId() const
 
 void AccessCard::setStatus(AccessCardStatus newStatus)
 {
+    addHistory(newStatus);
     status = newStatus;
+
+}
+
+void AccessCard::addHistory(AccessCardStatus newStatus)
+{
+    CardHistory newHistory;
+    newHistory.newStatus = newStatus;
+
+    history.push_back(newHistory);
+
+
 }
 
 AccessCardStatus AccessCard::getStatus() const
@@ -38,4 +50,13 @@ const std::string& AccessCard::getId() const
 {
     return cardId;
 }
+
+
+const std::vector<CardHistory>& AccessCard::getHistory() const
+{
+    return history;
+}
+
+
+
 
