@@ -16,9 +16,24 @@ bool AccessControlSystem::addEmployee(const Employee& employee)
 }
 
 
-void AccessControlSystem::addCard(const AccessCard& card)
+bool AccessControlSystem::addCard(const AccessCard& card)
 {
-    cards.push_back(card);
+    std::string employeeId = card.getOwnerId();
+
+    if (findCardById(card.getId()) == nullptr)
+    {
+        if (findEmployeeById(employeeId) != nullptr)
+        {
+            cards.push_back(card);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        return false;
+    }
 }
 
 
@@ -121,7 +136,7 @@ bool AccessControlSystem::activateCard(const std::string& cardId)
 {
     AccessCard* card = findCardById(cardId);
 
-    if(card == nullptr)
+    if(card == nullptr or card->getStatus() == AccessCardStatus::Lost)
     {
         return false;
     }
@@ -135,7 +150,7 @@ bool AccessControlSystem::deactivateCard(const std::string& cardId)
 {
     AccessCard* card = findCardById(cardId);
 
-    if(card == nullptr)
+    if(card == nullptr or card->getStatus() == AccessCardStatus::Lost )
     {
         return false;
     }

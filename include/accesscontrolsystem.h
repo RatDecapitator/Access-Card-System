@@ -18,9 +18,9 @@ class AccessControlSystem
 
     public:
 
-        void addEmployee(const Employee& employee);
+        bool addEmployee(const Employee& employee);
         
-        void addCard(const AccessCard& card);
+        bool addCard(const AccessCard& card);
         
         const std::vector<Employee>& getEmployees() const;
 
