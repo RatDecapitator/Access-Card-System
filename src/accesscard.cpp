@@ -60,5 +60,3 @@ const std::vector<CardHistory>& AccessCard::getHistory() const
 
 
 
-
-
