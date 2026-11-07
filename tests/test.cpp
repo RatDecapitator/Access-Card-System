@@ -95,19 +95,19 @@ TEST(employee_test, find_existing_employee)
 
     system.addEmployee(employee);
 
-    Employee* found_employee = system.findEmployeeById("E000001");
+    const auto found_employee = system.findEmployeeById("E000001");
 
-    ASSERT_NE(found_employee, nullptr);
-    EXPECT_EQ(found_employee->getId(), "E000001");
+    ASSERT_TRUE(found_employee);
+    EXPECT_EQ(found_employee->get().getId(), "E000001");
 }
 
 TEST(employee_test, find_non_existing_employee)
 {
     AccessControlSystem system;
 
-    Employee* found_employee = system.findEmployeeById("E999999");
+    const auto found_employee = system.findEmployeeById("E999999");
 
-    EXPECT_EQ(found_employee, nullptr);
+    EXPECT_FALSE(found_employee);
 }
 
 
@@ -133,17 +133,92 @@ TEST(card_test, find_existing_card)
 
     system.addCard(card);
 
-    AccessCard* found_card = system.findCardById("C000001");
+    const auto found_card = system.findCardById("C000001");
 
-    ASSERT_NE(found_card, nullptr);
-    EXPECT_EQ(found_card->getId(), "C000001");
+    ASSERT_TRUE(found_card);
+    EXPECT_EQ(found_card->get().getId(), "C000001");
 }
 
 TEST(card_test, find_non_existing_card)
 {
     AccessControlSystem system;
 
-    AccessCard* found_card = system.findCardById("C999999");
+    const auto found_card = system.findCardById("C999999");
 
-    EXPECT_EQ(found_card, nullptr);
+    EXPECT_FALSE(found_card);
+}
+
+TEST(employee_test, register_employee_generates_sequential_ids)
+{
+    AccessControlSystem system;
+
+    const auto first = system.registerEmployee("First Worker", EmployeeStatus::Working);
+    const auto second = system.registerEmployee("Second Worker", EmployeeStatus::Working);
+
+    ASSERT_TRUE(first);
+    ASSERT_TRUE(second);
+    EXPECT_EQ(*first, "E000001");
+    EXPECT_EQ(*second, "E000002");
+}
+
+TEST(employee_test, register_employee_advances_past_existing_ids)
+{
+    AccessControlSystem system;
+    system.addEmployee(Employee("E000004", "Existing Worker", EmployeeStatus::Working));
+
+    const auto added = system.registerEmployee("New Worker", EmployeeStatus::Working);
+
+    ASSERT_TRUE(added);
+    EXPECT_EQ(*added, "E000005");
+}
+
+TEST(card_test, register_card_generates_sequential_ids)
+{
+    AccessControlSystem system;
+    const auto employee = system.registerEmployee("Worker", EmployeeStatus::Working);
+    ASSERT_TRUE(employee);
+
+    const auto first = system.registerCard(*employee, AccessCardStatus::Active);
+    const auto second = system.registerCard(*employee, AccessCardStatus::Active);
+
+    ASSERT_TRUE(first);
+    ASSERT_TRUE(second);
+    EXPECT_EQ(*first, "C000001");
+    EXPECT_EQ(*second, "C000002");
+}
+
+TEST(card_test, register_card_advances_past_existing_ids)
+{
+    AccessControlSystem system;
+    system.addEmployee(Employee("E000001", "Worker", EmployeeStatus::Working));
+    system.addCard(AccessCard("C000008", "E000001", AccessCardStatus::Active));
+
+    const auto added = system.registerCard("E000001", AccessCardStatus::Active);
+
+    ASSERT_TRUE(added);
+    EXPECT_EQ(*added, "C000009");
+}
+
+TEST(card_test, register_card_rejects_unknown_owner)
+{
+    AccessControlSystem system;
+
+    EXPECT_FALSE(system.registerCard("E000001", AccessCardStatus::Active));
+}
+
+TEST(employee_test, register_employee_fails_after_maximum_id)
+{
+    AccessControlSystem system;
+    system.addEmployee(Employee("E999999", "Last Worker", EmployeeStatus::Working));
+
+    EXPECT_FALSE(system.registerEmployee("Extra Worker", EmployeeStatus::Working));
+}
+
+TEST(card_test, register_card_fails_after_maximum_id)
+{
+    AccessControlSystem system;
+    system.addEmployee(Employee("E000001", "Worker", EmployeeStatus::Working));
+    system.addCard(AccessCard("C999999", "E000001", AccessCardStatus::Active));
+
+    EXPECT_FALSE(system.registerCard("E000001", AccessCardStatus::Active));
 }
