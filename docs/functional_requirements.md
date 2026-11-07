@@ -25,7 +25,9 @@ History
 - Record every important event
 
 Persistence
-- Save all data automatically
+- Automatically save employee, card, and card history data
+- Restore saved records on startup
+- Preserve generated ID sequences across restarts
 
 Business Rules
 - Only active cards assigned to active employees may access the building.

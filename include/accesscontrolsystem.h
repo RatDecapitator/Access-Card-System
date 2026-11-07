@@ -21,12 +21,16 @@ class AccessControlSystem
         std::unordered_map<std::string, std::size_t> cardIndexes;
         unsigned int nextEmployeeSequence = 1;
         unsigned int nextCardSequence = 1;
+        std::string persistencePath;
 
         static std::optional<unsigned int> parseSequence(const std::string& id, char prefix);
         static std::string formatId(char prefix, unsigned int sequence);
         static void advanceSequence(unsigned int& nextSequence, const std::string& id, char prefix);
+        void load();
 
     public:
+
+        explicit AccessControlSystem(std::string persistenceFile = "access-card-system.db");
 
         bool addEmployee(const Employee& employee);
         
@@ -61,5 +65,7 @@ class AccessControlSystem
         bool activateCard(const std::string& cardId);
 
         bool deactivateCard(const std::string& cardId);
+
+        void save() const;
 
 };
