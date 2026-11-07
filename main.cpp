@@ -1,71 +1,70 @@
 #include <iostream>
 
+#include "employee.h"
+#include "accesscard.h"
 #include "accesscontrolsystem.h"
-
-namespace
-{
-    const char* employeeStatusName(EmployeeStatus status)
-    {
-        switch (status)
-        {
-            case EmployeeStatus::Working: return "Working";
-            case EmployeeStatus::OnVacation: return "On vacation";
-            case EmployeeStatus::Suspended: return "Suspended";
-            case EmployeeStatus::Fired: return "Fired";
-            case EmployeeStatus::SickLeave: return "Sick leave";
-        }
-        return "Unknown";
-    }
-
-    const char* cardStatusName(AccessCardStatus status)
-    {
-        switch (status)
-        {
-            case AccessCardStatus::Active: return "Active";
-            case AccessCardStatus::Inactive: return "Inactive";
-            case AccessCardStatus::Lost: return "Lost";
-        }
-        return "Unknown";
-    }
-}
 
 int main()
 {
     AccessControlSystem system;
 
-    if (system.getEmployees().empty())
+    const auto employee = system.registerEmployee("Jhon Doe", EmployeeStatus::Working);
+    if (employee)
     {
-        const auto employeeId = system.registerEmployee("Jhon Doe", EmployeeStatus::Working);
-        if (!employeeId)
-        {
-            std::cerr << "Couldn't add the initial employee\n";
-            return 1;
-        }
-
-        if (!system.registerCard(*employeeId, AccessCardStatus::Active))
-        {
-            std::cerr << "Couldn't add the initial card\n";
-            return 1;
-        }
+        std::cout << "New hire Jhon Doe (" << *employee
+                  << ") has been added to employees database\n";
+    }
+    else
+    {
+        std::cout << "Couldn't add new hire to database\n";
+        return 1;
     }
 
-    std::cout << "Employees:\n";
-    for (const auto& employee : system.getEmployees())
+    const auto card = system.registerCard(*employee, AccessCardStatus::Active);
+    if (card)
     {
-        std::cout << "  " << employee.getId() << " - " << employee.getName()
-                  << " (" << employeeStatusName(employee.getStatus()) << ")\n";
+        std::cout << "Card " << *card << " for new hire has been added to the system\n";
+    }
+    else
+    {
+        std::cout << "Couldn't add new card for Jhon\n";
+        return 1;
     }
 
-    std::cout << "Cards:\n";
-    for (const auto& card : system.getCards())
+    const bool can_Jhon_access = system.canAccess(*card);
+
+    if (can_Jhon_access)
     {
-        std::cout << "  " << card.getId() << " - owner " << card.getOwnerId()
-                  << " (" << cardStatusName(card.getStatus()) << ")\n";
+        std::cout << "Access granted for Jhon Doe\n";
+    }
+    else
+    {
+        std::cout << "Access denied for Jhon Doe\n";
     }
 
-    for (const auto& card : system.getCards())
+    const bool jhons_card_deactivation = system.deactivateCard(*card);
+
+    if (jhons_card_deactivation)
     {
-        std::cout << "Access for card " << card.getId() << ": "
-                  << (system.canAccess(card.getId()) ? "granted" : "denied") << '\n';
+        std::cout << "Jhons card has been deactivated\n";
     }
+
+    else
+    {
+        std::cout << "Jhons card cannot be deactivated\n";
+    }
+
+
+    const bool can_jhon_still_access = system.canAccess(*card);
+    
+    if (can_jhon_still_access)
+    {
+        std::cout << "Access granted for Jhon Doe\n";
+    }
+    else
+    {
+        std::cout << "Access denied for Jhon Doe\n";
+    }    
+
+
 }
